@@ -1,1 +1,2 @@
-module protos
+module github.com/Parnishkaspb/protos
+
