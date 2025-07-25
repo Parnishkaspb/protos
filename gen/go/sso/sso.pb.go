@@ -22,10 +22,13 @@ const (
 )
 
 type RegisterRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Identifier:
+	//
+	//	*RegisterRequest_Email
+	//	*RegisterRequest_Login
+	Identifier    isRegisterRequest_Identifier `protobuf_oneof:"identifier"`
+	Password      string                       `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,16 +63,27 @@ func (*RegisterRequest) Descriptor() ([]byte, []int) {
 	return file_sso_sso_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *RegisterRequest) GetIdentifier() isRegisterRequest_Identifier {
+	if x != nil {
+		return x.Identifier
+	}
+	return nil
+}
+
 func (x *RegisterRequest) GetEmail() string {
 	if x != nil {
-		return x.Email
+		if x, ok := x.Identifier.(*RegisterRequest_Email); ok {
+			return x.Email
+		}
 	}
 	return ""
 }
 
 func (x *RegisterRequest) GetLogin() string {
 	if x != nil {
-		return x.Login
+		if x, ok := x.Identifier.(*RegisterRequest_Login); ok {
+			return x.Login
+		}
 	}
 	return ""
 }
@@ -80,6 +94,22 @@ func (x *RegisterRequest) GetPassword() string {
 	}
 	return ""
 }
+
+type isRegisterRequest_Identifier interface {
+	isRegisterRequest_Identifier()
+}
+
+type RegisterRequest_Email struct {
+	Email string `protobuf:"bytes,1,opt,name=email,proto3,oneof"`
+}
+
+type RegisterRequest_Login struct {
+	Login string `protobuf:"bytes,2,opt,name=login,proto3,oneof"`
+}
+
+func (*RegisterRequest_Email) isRegisterRequest_Identifier() {}
+
+func (*RegisterRequest_Login) isRegisterRequest_Identifier() {}
 
 type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -359,11 +389,13 @@ var File_sso_sso_proto protoreflect.FileDescriptor
 
 const file_sso_sso_proto_rawDesc = "" +
 	"\n" +
-	"\rsso/sso.proto\x12\x04auth\"Y\n" +
-	"\x0fRegisterRequest\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email\x12\x14\n" +
-	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"+\n" +
+	"\rsso/sso.proto\x12\x04auth\"k\n" +
+	"\x0fRegisterRequest\x12\x16\n" +
+	"\x05email\x18\x01 \x01(\tH\x00R\x05email\x12\x16\n" +
+	"\x05login\x18\x02 \x01(\tH\x00R\x05login\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpasswordB\f\n" +
+	"\n" +
+	"identifier\"+\n" +
 	"\x10RegisterResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\"\x7f\n" +
 	"\fLoginRequest\x12\x16\n" +
@@ -423,6 +455,10 @@ func init() { file_sso_sso_proto_init() }
 func file_sso_sso_proto_init() {
 	if File_sso_sso_proto != nil {
 		return
+	}
+	file_sso_sso_proto_msgTypes[0].OneofWrappers = []any{
+		(*RegisterRequest_Email)(nil),
+		(*RegisterRequest_Login)(nil),
 	}
 	file_sso_sso_proto_msgTypes[2].OneofWrappers = []any{
 		(*LoginRequest_Email)(nil),
