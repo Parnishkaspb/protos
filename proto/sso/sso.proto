@@ -11,10 +11,8 @@ service Auth {
 }
 
 message RegisterRequest {
-  oneof identifier {
-    string email = 1;
-    string login = 2;
-  }
+  string email = 1;
+  string login = 2;
   string password = 3;
 }
 
